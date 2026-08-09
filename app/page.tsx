@@ -1,32 +1,42 @@
 import { fetchRandomGif } from "@/lib/giphy";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import { AnimatedGradientText } from "@/components/magicui/animated-gradient-text";
-import { BorderBeam } from "@/components/magicui/border-beam";
-import { ShimmerButton } from "@/components/magicui/shimmer-button";
-import { BentoGrid, BentoCard } from "@/components/magicui/bento-grid";
-import { DotPattern } from "@/components/magicui/dot-pattern";
-import { AnimatedSpan, Terminal } from "@/components/magicui/terminal";
+import { RatingBadge } from "@/components/rating-badge";
+import { RefreshButton } from "@/components/refresh-button";
 
 export const dynamic = "force-dynamic";
 
-async function Gif() {
+async function GifHero() {
   try {
     const { url, rating } = await fetchRandomGif();
     return (
-      <div className="relative w-full max-w-lg overflow-hidden rounded-2xl border border-white/10 bg-black/30">
-        <BorderBeam duration={8} size={250} />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={url} alt="Random gif" className="w-full" />
-        <span className="absolute right-3 top-3 rounded-full border border-white/10 bg-black/60 px-2.5 py-1 text-xs font-mono uppercase tracking-wide text-muted-foreground backdrop-blur-sm">
-          rating: {rating}
-        </span>
-      </div>
+      <figure className="animate-fade-up w-full max-w-xl">
+        <div className="sticker-frame overflow-hidden rounded-xl border-2 border-foreground bg-background">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={url}
+            alt="Random GIF from Giphy"
+            className="block w-full"
+            width={480}
+            height={270}
+          />
+        </div>
+        <figcaption className="mt-4 flex items-center justify-between gap-4">
+          <RatingBadge rating={rating} />
+          <p className="text-sm text-muted-foreground">
+            Every refresh picks between G and R ratings.
+          </p>
+        </figcaption>
+      </figure>
     );
   } catch {
     return (
-      <div className="flex w-full max-w-lg items-center justify-center rounded-2xl border border-white/10 bg-black/30 p-16 text-center text-muted-foreground">
-        Couldn&apos;t load a gif right now 😕
+      <div className="sticker-frame-alt flex w-full max-w-xl flex-col items-center gap-3 rounded-xl border-2 border-dashed border-border bg-surface px-8 py-16 text-center">
+        <p className="font-display text-lg font-semibold">Couldn&apos;t load a GIF</p>
+        <p className="text-sm text-muted-foreground">
+          Giphy might be down, or the API key is missing locally.
+        </p>
+        <RefreshButton />
       </div>
     );
   }
@@ -38,128 +48,115 @@ export default async function Home() {
       <Navbar />
 
       <main>
-        {/* Hero */}
-        <section className="relative flex flex-col items-center gap-8 overflow-hidden px-6 pb-24 pt-16 text-center">
-          <DotPattern />
-          <AnimatedGradientText>
-            🎲 refresh for chaos — every visit is a new gif
-          </AnimatedGradientText>
-          <h1 className="max-w-2xl text-balance text-4xl font-bold tracking-tight sm:text-5xl">
-            One button.
-            <br />
-            One random GIF.
-          </h1>
-          <p className="max-w-md text-balance text-muted-foreground">
-            Giphynator rolls the dice across Giphy&apos;s <code className="font-mono text-foreground">g</code> and{" "}
-            <code className="font-mono text-foreground">r</code> ratings and hands you whatever it lands on. No
-            search bar, no clutter, no explanations.
+        <section className="mx-auto flex max-w-3xl flex-col items-start gap-8 px-5 pb-20 pt-14">
+          <div className="max-w-lg">
+            <h1 className="font-display text-balance text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl">
+              One page.
+              <br />
+              One random GIF.
+            </h1>
+            <p className="mt-4 max-w-md text-pretty text-base leading-relaxed text-muted-foreground">
+              Giphynator hits Giphy on every load and shows whatever comes back. No search bar,
+              no categories, no account.
+            </p>
+          </div>
+
+          <GifHero />
+
+          <RefreshButton />
+        </section>
+
+        <section id="how" className="border-t border-border bg-surface">
+          <div className="mx-auto max-w-3xl px-5 py-16">
+            <h2 className="font-display text-2xl font-bold tracking-tight">How it works</h2>
+            <p className="mt-2 max-w-lg text-pretty text-muted-foreground">
+              Three steps, all server-side. The whole app fits in an afternoon of reading.
+            </p>
+
+            <ol className="mt-10 grid gap-8 sm:grid-cols-3">
+              <li className="flex flex-col gap-2">
+                <span className="font-display text-3xl font-extrabold text-primary">1</span>
+                <p className="font-semibold text-foreground">Fresh on every load</p>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  The homepage fetches a new GIF from Giphy with no caching between requests.
+                </p>
+              </li>
+              <li className="flex flex-col gap-2">
+                <span className="font-display text-3xl font-extrabold text-primary">2</span>
+                <p className="font-semibold text-foreground">G or R, coin flip</p>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  Each request randomly picks Giphy&apos;s safest tier or its spiciest allowed rating.
+                </p>
+              </li>
+              <li className="flex flex-col gap-2">
+                <span className="font-display text-3xl font-extrabold text-primary">3</span>
+                <p className="font-semibold text-foreground">Open source</p>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  Small Next.js app you can fork and ship.{" "}
+                  <a
+                    href="https://github.com/hector-mendoza/giphynator"
+                    className="font-medium text-accent underline decoration-border underline-offset-2 hover:decoration-accent"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    View the repo
+                  </a>
+                </p>
+              </li>
+            </ol>
+          </div>
+        </section>
+
+        <section id="devs" className="mx-auto max-w-3xl px-5 py-16">
+          <h2 className="font-display text-2xl font-bold tracking-tight">For developers</h2>
+          <p className="mt-2 max-w-lg text-pretty text-muted-foreground">
+            Skip the HTML. Two endpoints return JSON or redirect straight to the GIF bytes.
           </p>
 
-          <Gif />
+          <div className="mt-8 space-y-6">
+            <div>
+              <p className="mb-2 font-mono text-sm font-medium text-accent">
+                GET /api/random-gif
+              </p>
+              <pre className="code-block text-foreground">
+{`curl https://giphynator.vercel.app/api/random-gif
 
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <a href="/">
-              <ShimmerButton>Refresh for another gif</ShimmerButton>
-            </a>
-            <a
-              href="#devs"
-              className="rounded-full border border-white/10 px-6 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-            >
-              I&apos;m a developer 👀
-            </a>
-          </div>
-        </section>
-
-        {/* Docs */}
-        <section id="docs" className="mx-auto max-w-5xl px-6 py-20">
-          <div className="mb-10 text-center">
-            <h2 className="text-3xl font-bold tracking-tight">How it works</h2>
-            <p className="mt-3 text-muted-foreground">
-              Three moving parts. That&apos;s the entire product.
-            </p>
-          </div>
-          <BentoGrid>
-            <BentoCard
-              name="Random on every load"
-              description="The homepage fetches a fresh gif from Giphy server-side on every request — no caching, no repeats between refreshes."
-              icon={<span className="text-2xl">🔁</span>}
-            />
-            <BentoCard
-              name="g→r rating roll"
-              description="Each request flips a coin between Giphy's safest tier (g) and its spiciest (r) — still nothing explicit, Giphy doesn't host that."
-              icon={<span className="text-2xl">🎯</span>}
-            />
-            <BentoCard
-              name="Open source"
-              description="The whole thing is a small Next.js app you can read end to end in an afternoon. Fork it, break it, ship your own version."
-              icon={<span className="text-2xl">📦</span>}
-              href="https://github.com/hector-mendoza/giphynator"
-              cta="View source"
-            />
-          </BentoGrid>
-        </section>
-
-        {/* For devs */}
-        <section id="devs" className="mx-auto flex max-w-5xl flex-col items-center gap-10 px-6 py-20">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold tracking-tight">For the curious devs 👀</h2>
-            <p className="mt-3 max-w-lg text-muted-foreground">
-              Want the gif without the HTML? There are two endpoints. No auth, no rate-limit headers to
-              parse, no SDK required.
-            </p>
-          </div>
-
-          <Terminal className="max-w-xl">
-            <AnimatedSpan delay={0} className="text-muted-foreground">
-              <span>$ curl https://giphynator.vercel.app/api/random-gif</span>
-            </AnimatedSpan>
-            <AnimatedSpan delay={300} className="text-green-400">
-              <span>{"{"}</span>
-            </AnimatedSpan>
-            <AnimatedSpan delay={450} className="pl-4 text-green-400">
-              <span>&quot;url&quot;: &quot;https://media.giphy.com/...&quot;,</span>
-            </AnimatedSpan>
-            <AnimatedSpan delay={600} className="pl-4 text-green-400">
-              <span>&quot;rating&quot;: &quot;g&quot;</span>
-            </AnimatedSpan>
-            <AnimatedSpan delay={750} className="text-green-400">
-              <span>{"}"}</span>
-            </AnimatedSpan>
-            <AnimatedSpan delay={1000} className="mt-4 text-muted-foreground">
-              <span># or redirect straight to the image bytes</span>
-            </AnimatedSpan>
-            <AnimatedSpan delay={1150} className="text-muted-foreground">
-              <span>$ curl -L https://giphynator.vercel.app/api/random-gif/image</span>
-            </AnimatedSpan>
-            <AnimatedSpan delay={1400} className="text-purple-300">
-              <span>↳ 302 → media.giphy.com/...gif</span>
-            </AnimatedSpan>
-          </Terminal>
-
-          <div className="grid w-full gap-4 sm:grid-cols-2">
-            <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
-              <p className="font-mono text-sm text-purple-300">GET /api/random-gif</p>
+{
+  "url": "https://media.giphy.com/...",
+  "rating": "g"
+}`}
+              </pre>
               <p className="mt-2 text-sm text-muted-foreground">
-                Returns JSON: <code className="text-foreground">{`{ url, rating }`}</code>. Good for bots,
-                widgets, or anything that wants to decide what to do with the gif itself.
+                Returns JSON with the GIF URL and rating. Handy for bots, widgets, or anything that
+                wants to handle the file itself.
               </p>
             </div>
-            <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
-              <p className="font-mono text-sm text-purple-300">GET /api/random-gif/image</p>
+
+            <div>
+              <p className="mb-2 font-mono text-sm font-medium text-accent">
+                GET /api/random-gif/image
+              </p>
+              <pre className="code-block text-foreground">
+{`curl -L https://giphynator.vercel.app/api/random-gif/image
+# → 302 redirect to media.giphy.com/...gif`}
+              </pre>
               <p className="mt-2 text-sm text-muted-foreground">
-                302-redirects straight to the gif file. Drop it in an{" "}
-                <code className="text-foreground">&lt;img src&gt;</code>, a README, or a Slack webhook.
+                Redirects to the GIF file. Drop the URL in an{" "}
+                <code className="rounded bg-surface px-1 py-0.5 font-mono text-xs text-foreground">
+                  &lt;img src&gt;
+                </code>
+                , a README, or a Slack webhook.
               </p>
             </div>
-          </div>
 
-          <div className="w-full max-w-xl rounded-xl border border-white/10 bg-white/[0.03] p-5 text-sm text-muted-foreground">
-            <p className="mb-2 font-semibold text-foreground">Run it locally</p>
-            <pre className="overflow-x-auto font-mono text-xs leading-relaxed">
+            <div className="rounded-xl border border-border bg-surface p-5">
+              <p className="font-semibold text-foreground">Run locally</p>
+              <pre className="code-block mt-3 border-0 bg-background p-0 text-xs">
 {`npm install
 cp .env.local.example .env.local   # add your GIPHY_API_KEY
 npm run dev`}
-            </pre>
+              </pre>
+            </div>
           </div>
         </section>
       </main>
