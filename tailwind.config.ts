@@ -22,6 +22,10 @@ const config: Config = {
           DEFAULT: "var(--accent)",
           foreground: "var(--accent-foreground)",
         },
+        burst: {
+          DEFAULT: "var(--burst)",
+          pink: "var(--burst-2)",
+        },
         ring: "var(--ring)",
         rating: {
           g: "var(--rating-g)",
@@ -33,17 +37,18 @@ const config: Config = {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
         mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
-      borderRadius: {
-        lg: "0.625rem",
-        xl: "0.875rem",
-      },
       animation: {
         "fade-up": "fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards",
+        float: "float 4s ease-in-out infinite",
       },
       keyframes: {
         "fade-up": {
           from: { opacity: "0", transform: "translateY(8px)" },
           to: { opacity: "1", transform: "translateY(0)" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0) rotate(0deg)" },
+          "50%": { transform: "translateY(-6px) rotate(3deg)" },
         },
       },
     },

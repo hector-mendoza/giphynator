@@ -1,16 +1,16 @@
-import { Unbounded, Work_Sans, JetBrains_Mono } from "next/font/google";
+import { Bangers, Nunito, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const display = Unbounded({
+const display = Bangers({
   subsets: ["latin"],
   variable: "--font-display",
-  weight: ["600", "700", "800"],
+  weight: "400",
 });
 
-const sans = Work_Sans({
+const sans = Nunito({
   subsets: ["latin"],
   variable: "--font-sans",
-  weight: ["400", "500", "600"],
+  weight: ["400", "600", "700"],
 });
 
 const mono = JetBrains_Mono({

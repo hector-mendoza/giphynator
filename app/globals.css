@@ -4,21 +4,24 @@
 
 @layer base {
   :root {
-    /* OKLCH palette — honey-orange brand on pure white */
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.22 0.025 55);
-    --surface: oklch(0.965 0.008 55);
-    --border: oklch(0.88 0.015 55);
-    --muted: oklch(0.965 0.008 55);
-    --muted-foreground: oklch(0.48 0.02 55);
-    --primary: oklch(0.62 0.17 55);
-    --primary-hover: oklch(0.55 0.17 55);
+    /* Comic palette — bright ink on paper yellow */
+    --background: oklch(0.955 0.045 95);
+    --foreground: oklch(0.18 0.02 280);
+    --surface: oklch(0.99 0.01 95);
+    --border: oklch(0.18 0.02 280);
+    --muted: oklch(0.92 0.03 95);
+    --muted-foreground: oklch(0.42 0.03 280);
+    --primary: oklch(0.68 0.21 45);
+    --primary-hover: oklch(0.6 0.21 45);
     --primary-foreground: oklch(1 0 0);
-    --accent: oklch(0.42 0.14 250);
+    --accent: oklch(0.52 0.19 250);
     --accent-foreground: oklch(1 0 0);
-    --ring: oklch(0.62 0.17 55);
-    --rating-g: oklch(0.52 0.14 145);
-    --rating-r: oklch(0.58 0.2 30);
+    --burst: oklch(0.82 0.18 95);
+    --burst-2: oklch(0.72 0.2 330);
+    --ring: oklch(0.68 0.21 45);
+    --rating-g: oklch(0.58 0.2 145);
+    --rating-r: oklch(0.62 0.24 25);
+    --ink-shadow: oklch(0.18 0.02 280);
   }
 
   * {
@@ -37,10 +40,13 @@
 
   body {
     @apply bg-background text-foreground antialiased;
+    background-image:
+      radial-gradient(circle, oklch(0.18 0.02 280 / 0.07) 1px, transparent 1px);
+    background-size: 14px 14px;
   }
 
   ::selection {
-    background: oklch(0.62 0.17 55 / 0.25);
+    background: oklch(0.68 0.21 45 / 0.35);
   }
 }
 
@@ -55,15 +61,33 @@
 }
 
 @layer components {
+  .comic-outline {
+    border: 3px solid var(--foreground);
+  }
+
+  .comic-shadow {
+    box-shadow: 5px 5px 0 var(--ink-shadow);
+  }
+
+  .comic-shadow-sm {
+    box-shadow: 3px 3px 0 var(--ink-shadow);
+  }
+
+  .comic-panel {
+    @apply comic-outline rounded-2xl bg-surface;
+    box-shadow: 5px 5px 0 var(--ink-shadow);
+  }
+
   .sticker-frame {
-    box-shadow:
-      4px 4px 0 oklch(0.22 0.025 55),
-      4px 4px 0 2px oklch(0.22 0.025 55);
-    transform: rotate(-0.6deg);
+    @apply comic-outline rounded-2xl bg-surface;
+    box-shadow: 7px 7px 0 var(--ink-shadow);
+    transform: rotate(-1.2deg);
   }
 
   .sticker-frame-alt {
-    transform: rotate(0.4deg);
+    @apply comic-outline rounded-2xl bg-surface;
+    box-shadow: 6px 6px 0 var(--ink-shadow);
+    transform: rotate(0.8deg);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -73,7 +97,66 @@
     }
   }
 
+  .comic-bubble {
+    @apply relative inline-flex items-center rounded-2xl px-3 py-1 font-display text-sm font-normal tracking-wide;
+    border: 3px solid var(--foreground);
+    box-shadow: 3px 3px 0 var(--ink-shadow);
+  }
+
+  .comic-bubble::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 18px;
+    width: 14px;
+    height: 14px;
+    background: inherit;
+    border-right: 3px solid var(--foreground);
+    border-bottom: 3px solid var(--foreground);
+    transform: rotate(45deg);
+  }
+
+  .comic-burst {
+    @apply inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full font-display text-2xl;
+    border: 3px solid var(--foreground);
+    box-shadow: 3px 3px 0 var(--ink-shadow);
+    background: var(--burst);
+  }
+
+  .comic-burst-pink {
+    background: var(--burst-2);
+  }
+
+  .comic-heading {
+    @apply font-display tracking-wide;
+    text-shadow: 2px 2px 0 oklch(0.18 0.02 280 / 0.12);
+  }
+
   .code-block {
-    @apply overflow-x-auto rounded-lg border bg-surface px-4 py-3 font-mono text-[0.8125rem] leading-relaxed;
+    @apply comic-outline overflow-x-auto rounded-xl bg-surface px-4 py-3 font-mono text-[0.8125rem] leading-relaxed;
+    box-shadow: 4px 4px 0 var(--ink-shadow);
+  }
+
+  .comic-wiggle:hover {
+    animation: wiggle 0.45s ease-in-out;
+  }
+
+  @keyframes wiggle {
+    0%,
+    100% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(-2deg);
+    }
+    75% {
+      transform: rotate(2deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .comic-wiggle:hover {
+      animation: none;
+    }
   }
 }
