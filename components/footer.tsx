@@ -1,23 +1,23 @@
 export function Footer() {
   return (
-    <footer className="border-t border-white/5 py-10">
-      <div className="mx-auto flex max-w-5xl flex-col items-center gap-3 px-6 text-center text-sm text-muted-foreground">
-        <p>
-          Built with Next.js, the Giphy API, and questionable life choices.
+    <footer className="border-t border-border py-12">
+      <div className="mx-auto flex max-w-3xl flex-col gap-4 px-5 text-sm text-muted-foreground">
+        <p className="text-pretty">
+          Built with Next.js and the Giphy API. Fork it, break it, ship your own version.
         </p>
         <p>
           <a
             href="https://github.com/hector-mendoza/giphynator"
             target="_blank"
             rel="noreferrer"
-            className="underline decoration-white/20 underline-offset-4 transition-colors hover:text-foreground"
+            className="font-medium text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-primary"
           >
             Source on GitHub
           </a>
-          {" · "}
+          <span className="mx-2 text-border">·</span>
           <a
             href="/api/random-gif"
-            className="underline decoration-white/20 underline-offset-4 transition-colors hover:text-foreground"
+            className="font-mono text-accent underline decoration-border underline-offset-4 transition-colors hover:decoration-accent"
           >
             /api/random-gif
           </a>
